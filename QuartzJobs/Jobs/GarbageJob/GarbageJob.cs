@@ -3,7 +3,7 @@
 namespace QuartzJobs.Jobs;
 
 [DisallowConcurrentExecution] // Атрибут запрещающий создание более 1 задачи одновременно
-public class GarbageJob : IJob
+public class GarbageJob : IJob, IDisposable
 {
     private readonly ILogger<GarbageJob> _logger;
     private readonly Random _random = new();
@@ -17,5 +17,11 @@ public class GarbageJob : IJob
     {
         _logger.LogInformation($"GarbageJob: очистил {_random.Next(100)} объектов");
         await Task.CompletedTask;
+    }
+    
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _logger.LogInformation("GarbageJob: disposing");
     }
 }

@@ -31,6 +31,13 @@ public static class ConfigureServices
             });
             
             cfg.AddJobListener<PaymentJobListener>(); // Добавляем подписчика на задачу
+
+            cfg.ScheduleJob<GarbageJob>(trigger => trigger
+                .WithIdentity("Combined Configuration Trigger")
+                //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(7)))
+                .StartNow()
+                .WithDailyTimeIntervalSchedule(interval: 1, intervalUnit: IntervalUnit.Minute)
+                .WithDescription("my awesome trigger configured for a job with single call"));
         });
 
         // Добавляем сервер Quartz

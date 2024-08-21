@@ -7,7 +7,7 @@ public class GarbageJobSetup : IConfigureOptions<QuartzOptions>
 {
     public void Configure(QuartzOptions options)
     {
-        var jobKey = JobKey.Create(nameof(GarbageJob));
+        /*var jobKey = JobKey.Create(nameof(GarbageJob));
 
         options.AddJob<GarbageJob>(j => j.WithIdentity(jobKey));
 
@@ -17,7 +17,7 @@ public class GarbageJobSetup : IConfigureOptions<QuartzOptions>
          cfg.AddTrigger(opts => opts
             .ForJob(jobKey)
             .WithCronSchedule(configuration.GetSection("GarbageJob:CronSchedule").Value));
-        */
+        #1#
 
         // Пример с использованием обычных величин
         
@@ -26,6 +26,7 @@ public class GarbageJobSetup : IConfigureOptions<QuartzOptions>
                 .WithIdentity(Guid.NewGuid().ToString())
             .WithSimpleSchedule(s =>
                 s.WithIntervalInMinutes(1)
-                    .RepeatForever()));
+                    .RepeatForever()));*/
+        
     }
 }
