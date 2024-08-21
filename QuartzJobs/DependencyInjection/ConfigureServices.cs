@@ -30,13 +30,15 @@ public static class ConfigureServices
                 options.UseNewtonsoftJsonSerializer(); // Используем Newtonsoft.Json для сериализации данных
             });
             
-            cfg.AddJobListener<PaymentJobListener>(); // Добавляем подписчика на задачу
-            
             // Автоматиеческое прерывание задач, которые привысели время выполнения
             cfg.UseJobAutoInterrupt(options =>
             {
                 options.DefaultMaxRunTime = TimeSpan.FromMinutes(5);
             });
+            
+            cfg.AddJobListener<PaymentJobListener>(); // Добавляем подписчика на задачу
+            
+            // Добавляем в IoC планеровщик
         });
 
         // Добавляем сервер Quartz

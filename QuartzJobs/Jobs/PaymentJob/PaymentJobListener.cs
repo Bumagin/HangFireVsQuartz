@@ -34,7 +34,7 @@ public class PaymentJobListener : IJobListener
         // Проверка идентификатора задачи
         if (context.JobDetail.Key.Name.Equals(nameof(PaymentJob)))
         {
-            _logger.LogInformation("PaymentListener: я услышал PaymentJob, но меня наложили право вето...");
+            _logger.LogInformation("PaymentListener: я услышал что на PaymentJob наложили право вето...");
         }
 
         await Task.CompletedTask;
