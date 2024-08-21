@@ -3,30 +3,15 @@ using Quartz;
 
 namespace QuartzJobs.Jobs;
 
-public class GarbageJobSetup : IConfigureOptions<QuartzOptions>
+public class GarbageJobSetup : IConfigureOptions<IServiceCollectionQuartzConfigurator>
 {
-    public void Configure(QuartzOptions options)
+    public void Configure(IServiceCollectionQuartzConfigurator options)
     {
-        /*var jobKey = JobKey.Create(nameof(GarbageJob));
-
-        options.AddJob<GarbageJob>(j => j.WithIdentity(jobKey));
-
-        /*
-         Пример с использованием Cron
-
-         cfg.AddTrigger(opts => opts
-            .ForJob(jobKey)
-            .WithCronSchedule(configuration.GetSection("GarbageJob:CronSchedule").Value));
-        #1#
-
-        // Пример с использованием обычных величин
-        
-        options.AddTrigger(opts => 
-            opts.ForJob(jobKey)
-                .WithIdentity(Guid.NewGuid().ToString())
-            .WithSimpleSchedule(s =>
-                s.WithIntervalInMinutes(1)
-                    .RepeatForever()));*/
-        
+        options.ScheduleJob<GarbageJob>(trigger => trigger
+            .WithIdentity("Combined Configuration Trigger")
+            //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(7)))
+            .StartNow()
+            .WithDailyTimeIntervalSchedule(interval: 1, intervalUnit: IntervalUnit.Minute)
+            .WithDescription("my awesome trigger configured for a job with single call"));
     }
 }

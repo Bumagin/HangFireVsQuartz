@@ -21,16 +21,10 @@ public class NotificationController : ControllerBase
         // Создание планировщика
         var scheduler = await _factory.GetScheduler();
 
-        // Создание словаря с параметрами
-        var jobDataMap = new JobDataMap
-        {
-            { "Client", client }
-        };
-
         // Создание задания с параметрами и долговечностью
         var jobDetail = JobBuilder.Create<NotificationJob>()
             .WithIdentity(nameof(NotificationJob)) // Уникальный идентификатор
-            .UsingJobData(jobDataMap) // Параметры
+            .UsingJobData(nameof(NotificationJob.ClientName), client) // Параметры
             .StoreDurably() // Обозначение задачи как долговечной
             .Build();
 

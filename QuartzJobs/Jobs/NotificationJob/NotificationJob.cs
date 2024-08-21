@@ -10,11 +10,11 @@ public class NotificationJob : IJob
     {
         _logger = logger;
     }
-
+    
+    public string ClientName { get; set; }
+    
     public async Task Execute(IJobExecutionContext context)
     {
-        var clientName = context.JobDetail.JobDataMap.GetString("Client");
-
-        _logger.LogInformation($"NotificationLog: отправил уведомление клиенту {clientName}");
+        _logger.LogInformation($"NotificationLog: отправил уведомление клиенту {ClientName}");
     }
 }
