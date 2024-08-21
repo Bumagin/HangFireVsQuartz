@@ -1,0 +1,36 @@
+﻿services:
+  quartz.host:
+    restart: always
+    build:
+      context: .
+      dockerfile: QuartzJobs/Dockerfile
+    environment:
+      ConnectionStrings__Default: ${CONNECTION_STRING_DEFAULT}
+      ASPNETCORE_URLS: ${QUARTZ_ADDRESS}
+    ports:
+      - "5101:5101"
+    depends_on:
+      - postgresql
+  
+  hangfire.host:
+    restart: always
+    build:
+      context: .
+      dockerfile: HangFire/Dockerfile
+    environment:
+      ConnectionStrings__Default: ${CONNECTION_STRING_DEFAULT}
+      ASPNETCORE_URLS: ${HANGFIRE_ADDRESS}
+    ports:
+      - "5102:5102"
+    depends_on:
+      - postgresql
+  
+  postgresql:
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - "5100:5432"

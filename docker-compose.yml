@@ -1,0 +1,12 @@
+﻿services:
+  quartz.host:
+    image: quartz
+    container_name: quartz.host
+  
+  hangfire.host:
+    image: hangfire.host
+    container_name: hangfire.host
+  
+  postgresql:
+    image: postgres
+    container_name: postgresql
