@@ -58,7 +58,7 @@ public static class ConfigureServices
 
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "HangFire API", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Quartz Net API", Version = "v1" });
         });
     }
 
