@@ -1,8 +1,8 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using System.Reflection;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.AspNetCore;
-using QuartzJobs.Jobs;
-using QuartzJobs.Jobs.PaymentJob;
 
 namespace QuartzJobs.DependencyInjection;
 
@@ -32,13 +32,11 @@ public static class ConfigureServices
             
             cfg.AddJobListener<PaymentJobListener>(); // Добавляем подписчика на задачу
             
-            
             // Автоматиеческое прерывание задач, которые привысели время выполнения
             cfg.UseJobAutoInterrupt(options =>
             {
                 options.DefaultMaxRunTime = TimeSpan.FromMinutes(5);
             });
-            
         });
 
         // Добавляем сервер Quartz
@@ -51,11 +49,16 @@ public static class ConfigureServices
     }
 
     /// <summary>
-    /// Конфигурирует задания (Jobs) для Quartz.
+    /// Конфигурирует Setup классы заданий через рефлексию (Библиотека Scrutor)
     /// </summary>
     private static void ConfigureJobs(IServiceCollection services)
     {
-        services.ConfigureOptions<GarbageJobSetup>(); // Настраиваем задание для очистки мусора
+        services.Scan(scan => scan
+            .FromAssemblies(Assembly.GetExecutingAssembly())
+            .AddClasses(classes => 
+                classes.AssignableTo<IConfigureOptions<IServiceCollectionQuartzConfigurator>>())
+            .AsImplementedInterfaces()
+            .WithTransientLifetime());
     }
 
     #region дефолтные
