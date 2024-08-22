@@ -20,9 +20,9 @@ public class PaymentController : ControllerBase
     }
     
     [HttpPost]
-    public async Task PayOrder(string client)
+    public async Task PayOrder(string client, CancellationToken cancellationToken)
     {
-        var scheduler = await _factory.GetScheduler();
+        var scheduler = await _factory.GetScheduler(cancellationToken);
 
         // Создание JobDataMap с параметрами
         var jobDataMap = new JobDataMap
@@ -38,7 +38,7 @@ public class PaymentController : ControllerBase
             .Build();
 
         // Убедитесь, что задача зарегистрирована в планировщике
-        await scheduler.AddJob(jobDetail, true); // true означает, что задача будет заменять существующую задачу с таким же идентификатором
+        await scheduler.AddJob(jobDetail, true, cancellationToken); // true означает, что задача будет заменять существующую задачу с таким же идентификатором
 
         // Создание триггера для выполнения задачи через 25 секунд
         var trigger = TriggerBuilder.Create()
@@ -47,6 +47,6 @@ public class PaymentController : ControllerBase
             .Build();
 
         // Запуск задачи с триггером
-        await scheduler.ScheduleJob(trigger); 
+        await scheduler.ScheduleJob(trigger, cancellationToken); 
     }
 }

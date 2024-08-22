@@ -20,11 +20,11 @@ public class SessionController : ControllerBase
     }
     
     [HttpPost]
-    public async Task StartSession(string client)
+    public async Task StartSession(string client, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Клиент {client} начал сессию в {DateTime.Now}");
         
-        var scheduler = await _factory.GetScheduler();
+        var scheduler = await _factory.GetScheduler(cancellationToken);
 
         // Создание JobDataMap с параметрами
         var jobDataMap = new JobDataMap
@@ -40,7 +40,7 @@ public class SessionController : ControllerBase
             .Build();
 
         // Убедитесь, что задача зарегистрирована в планировщике
-        await scheduler.AddJob(jobDetail, true); // true означает, что задача будет заменять существующую задачу с таким же идентификатором
+        await scheduler.AddJob(jobDetail, true, cancellationToken); // true означает, что задача будет заменять существующую задачу с таким же идентификатором
 
         // Создание триггера для выполнения задачи через 25 секунд
         var trigger = TriggerBuilder.Create()
@@ -49,6 +49,6 @@ public class SessionController : ControllerBase
             .Build();
 
         // Запуск задачи с триггером
-        await scheduler.ScheduleJob(trigger); 
+        await scheduler.ScheduleJob(trigger, cancellationToken); 
     }
 }

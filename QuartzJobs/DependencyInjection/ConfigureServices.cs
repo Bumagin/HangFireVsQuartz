@@ -37,8 +37,6 @@ public static class ConfigureServices
             });
             
             cfg.AddJobListener<PaymentJobListener>(); // Добавляем подписчика на задачу
-            
-            // Добавляем в IoC планеровщик
         });
 
         // Добавляем сервер Quartz

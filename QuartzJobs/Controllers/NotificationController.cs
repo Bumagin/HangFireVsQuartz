@@ -16,10 +16,10 @@ public class NotificationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task SendNotification(string client)
+    public async Task SendNotification(string client, CancellationToken cancellationToken)
     {
         // Создание планировщика
-        var scheduler = await _factory.GetScheduler();
+        var scheduler = await _factory.GetScheduler(cancellationToken);
 
         // Создание задания с параметрами и долговечностью
         var jobDetail = JobBuilder.Create<NotificationJob>()
@@ -29,7 +29,7 @@ public class NotificationController : ControllerBase
             .Build();
 
         // Добавляем задание в очередь
-        await scheduler.AddJob(jobDetail, true); // true означает, что задача будет заменять существующую задачу с таким же идентификатором
+        await scheduler.AddJob(jobDetail, true, cancellationToken); // true означает, что задача будет заменять существующую задачу с таким же идентификатором
 
         // Создание триггера для немедленного запуска задачи
         var trigger = TriggerBuilder.Create()
@@ -38,6 +38,6 @@ public class NotificationController : ControllerBase
             .Build();
 
         // Запуск задачи с триггером
-        await scheduler.ScheduleJob(trigger); 
+        await scheduler.ScheduleJob(trigger, cancellationToken); 
     }
 }
