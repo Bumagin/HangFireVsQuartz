@@ -35,7 +35,7 @@ public static class ConfigureServices
             {
                 options.DefaultMaxRunTime = TimeSpan.FromMinutes(5);
             });
-            
+                
             cfg.AddJobListener<PaymentJobListener>(); // Добавляем подписчика на задачу
         });
 

@@ -8,10 +8,9 @@ public class GarbageJobSetup : IConfigureOptions<IServiceCollectionQuartzConfigu
     public void Configure(IServiceCollectionQuartzConfigurator options)
     {
         options.ScheduleJob<GarbageJob>(trigger => trigger
-            .WithIdentity("Combined Configuration Trigger")
+            .WithIdentity("GarbageJobTrigger")
             //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(7)))
             .StartNow()
-            .WithDailyTimeIntervalSchedule(interval: 1, intervalUnit: IntervalUnit.Minute)
-            .WithDescription("my awesome trigger configured for a job with single call"));
+            .WithDailyTimeIntervalSchedule(interval: 1, intervalUnit: IntervalUnit.Minute));
     }
 }

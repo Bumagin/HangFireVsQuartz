@@ -30,7 +30,10 @@ public static class ConfigureServices
         });
 
         // Добавление сервера Hangfire
-        services.AddHangfireServer();
+        services.AddHangfireServer(cfg =>
+        {
+        //    cfg.StopTimeout = TimeSpan.FromMinutes(5);
+        });
     }
 
     /// <summary>
@@ -40,7 +43,7 @@ public static class ConfigureServices
     {
         app.UseHangfireDashboard("/hangfire", new DashboardOptions
         {
-            // Настройка фильтров авторизации доски (пустой массив означает отсутствие авторизации)
+            // Настройка фильтров авторизации доски (пустой массив означат отсутствие авторизации)
             Authorization = Array.Empty<IDashboardAuthorizationFilter>(),
         });
 
